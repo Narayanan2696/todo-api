@@ -15,7 +15,9 @@ func crud() http.HandlerFunc {
 			data := views.PostRequest{}
 			json.NewDecoder(r.Body).Decode(&data)
 			fmt.Println(data)
-			if err := model.CreateTaskList(data.Name, data.Task); err != nil {
+			err := model.CreateTaskList(data.Name, data.Task)
+			if err != nil {
+				fmt.Println("creation error")
 				w.Write([]byte("error occured"))
 				return
 			}
