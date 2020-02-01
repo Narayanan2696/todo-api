@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func show() http.HandlerFunc {
+func showOrDelete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			fmt.Println("Encountered GET Method inside controller")
@@ -28,6 +28,18 @@ func show() http.HandlerFunc {
 			w.WriteHeader(http.StatusOK)
 			// fmt.Println(data)
 			json.NewEncoder(w).Encode(data)
+		} else if r.Method == http.MethodDelete {
+			fmt.Println("Encountered DELETE Method inside controller")
+			ids := mux.Vars(r)
+			id, err := strconv.Atoi(ids["id"])
+			if model.DeleteTask(id) != true {
+				fmt.Println(err)
+				return
+			}
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(struct {
+				Report string `json:"report"`
+			}{"task deleted"})
 		}
 	}
 }

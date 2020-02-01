@@ -16,6 +16,6 @@ func Register() *mux.Router {
 	router := mux.NewRouter()
 	router.HandleFunc("/ping", ping())
 	router.HandleFunc("/", crud())
-	router.HandleFunc("/{id}", show())
+	router.HandleFunc("/{id}", showOrDelete())
 	return router
 }

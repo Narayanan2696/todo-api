@@ -8,6 +8,7 @@ import (
 
 func ReadAll() ([]views.PostRequest, error) {
 	rows, err := con.Query("SELECT name, task FROM TASKLIST")
+	defer rows.Close()
 	if err != nil {
 		log.Fatal(err)
 		return nil, err
@@ -26,10 +27,12 @@ func Read(id int, name ...string) ([]views.PostRequest, error) {
 		// fmt.Printf("arr len:%d\n", len(name))
 		// fmt.Printf("name:%s\n", name)
 		rows, err := con.Query("SELECT name, task FROM TASKLIST where id=? and name=?", id, name[0])
+		defer rows.Close()
 		// fmt.Printf("Type of row:%T\n", rows)
 		return prepareTask(rows, err)
 	} else {
 		rows, err := con.Query("SELECT name, task FROM TASKLIST where id=?", id)
+		defer rows.Close()
 		return prepareTask(rows, err)
 	}
 }
